@@ -44,7 +44,38 @@
     let roomKey="living",mode="explore",lang="zh",selected=null,target=2,sentence=0,stars=Number(localStorage.getItem("xiaowen-stars")||0);
     const $=s=>document.querySelector(s),roomNav=$("#rooms"),objects=$("#objects"),prompt=$("#prompt"),promptLabel=$("#promptLabel"),promptText=$("#promptText");
     $("#stars").textContent=stars;
-    function speak(item,full=false){if(!("speechSynthesis" in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(full?item[4]:(lang==="zh"?item[1]:item[2]));u.lang=full||lang==="zh"?"zh-CN":"en-US";u.rate=.78;u.pitch=1.08;speechSynthesis.speak(u)}
+    let availableVoices=[];
+    function loadVoices(){availableVoices=speechSynthesis.getVoices()}
+    if("speechSynthesis" in window){loadVoices();if("onvoiceschanged" in speechSynthesis)speechSynthesis.onvoiceschanged=loadVoices}
+    function chooseVoice(language){
+      const voices=availableVoices.length?availableVoices:speechSynthesis.getVoices();
+      const chinese=language.startsWith("zh");
+      const candidates=voices.filter(v=>chinese?/^zh/i.test(v.lang):/^en/i.test(v.lang));
+      const quality=chinese
+        ? ["xiaoxiao","云希","晓晓","ting-ting","tingting","yu-shu","meijia","sin-ji","普通话","mandarin","natural","premium","enhanced","siri"]
+        : ["samantha","ava","google us english","natural","premium","enhanced","siri"];
+      return candidates.sort((a,b)=>{
+        const score=v=>{
+          const name=v.name.toLowerCase();
+          const exact=chinese?/^zh[-_]?(cn|hans)/i.test(v.lang):/^en[-_]?us/i.test(v.lang);
+          const rank=quality.findIndex(word=>name.includes(word.toLowerCase()));
+          return (exact?40:0)+(rank<0?0:100-rank*4)+(v.default?5:0);
+        };
+        return score(b)-score(a)
+      })[0]||null
+    }
+    function speak(item,full=false){
+      if(!("speechSynthesis" in window))return;
+      speechSynthesis.cancel();
+      const isChinese=full||lang==="zh";
+      const u=new SpeechSynthesisUtterance(full?item[4]:(isChinese?item[1]:item[2]));
+      u.lang=isChinese?"zh-CN":"en-US";
+      const voice=chooseVoice(u.lang);
+      if(voice)u.voice=voice;
+      u.rate=isChinese?(full?.9:.86):.9;
+      u.pitch=1;
+      speechSynthesis.speak(u)
+    }
     function drawRooms(){roomNav.innerHTML=Object.entries(rooms).map(([k,r])=>`<button data-room="${k}" class="${k===roomKey?'active':''}" style="--room:${r.color}"><span>${r.icon}</span>${r.name}</button>`).join("")}
     function draw(){const room=rooms[roomKey];drawRooms();$("#roomTitle").textContent=`${room.icon} ${room.name}`;objects.innerHTML=room.items.map((x,i)=>`<button class="object ${selected===i?'selected':''}" data-item="${i}" style="--color:${x[3]};--delay:${i*70}ms" aria-label="${x[1]}，${x[2]}"><span class="emoji">${x[0]}</span><strong>${x[1]}</strong><small>${x[2]}</small><span class="note">♪</span></button>`).join("");$("#sentenceActions").hidden=mode!=="sentence";updatePrompt()}
     function updatePrompt(){const room=rooms[roomKey];prompt.classList.remove("success","celebrate");if(mode==="find"){promptLabel.textContent="请找到";promptText.textContent=lang==="zh"?room.items[target][1]:room.items[target][2]}else if(mode==="sentence"){promptLabel.textContent="跟我说";promptText.textContent=room.items[selected??sentence][4]}else{promptLabel.textContent="小提示";promptText.textContent=selected===null?"点击物品，听听它叫什么！":room.items[selected][4]}}
