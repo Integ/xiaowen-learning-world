@@ -1,0 +1,182 @@
+.celebration {
+  position: fixed;
+  z-index: 42;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  visibility: hidden;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: radial-gradient(circle at center, rgba(255, 252, 218, .58), rgba(255, 197, 115, .16) 48%, rgba(85, 165, 172, .14));
+}
+
+.celebration.is-showing {
+  visibility: visible;
+  animation: celebration-screen 2.5s both ease;
+}
+
+.celebration-rays {
+  position: absolute;
+  width: min(92vw, 760px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  opacity: .62;
+  background: repeating-conic-gradient(from 0deg, rgba(255, 230, 102, .74) 0 11deg, transparent 11deg 24deg);
+  mask-image: radial-gradient(circle, transparent 0 18%, #000 25% 66%, transparent 72%);
+  animation: celebration-rays 6s linear infinite;
+}
+
+.praise-mascot {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: min(50vw, 330px);
+  aspect-ratio: 1;
+  border: 9px solid rgba(255, 255, 255, .94);
+  border-radius: 48% 52% 44% 56% / 50% 46% 54% 50%;
+  background: linear-gradient(145deg, #ffeaa2, #ffc97c);
+  box-shadow: inset 0 -24px 0 rgba(226, 139, 70, .14), 0 20px 0 rgba(99, 118, 98, .14), 0 35px 70px rgba(65, 96, 91, .25);
+  animation: praise-mascot 2.45s both cubic-bezier(.18, 1.25, .35, 1);
+}
+
+.praise-face {
+  font-size: min(28vw, 190px);
+  filter: drop-shadow(0 10px 0 rgba(121, 80, 42, .13));
+  animation: praise-face 1s .25s 2 ease-in-out;
+}
+
+.praise-crown {
+  position: absolute;
+  z-index: 4;
+  top: -23%;
+  left: 50%;
+  font-size: min(13vw, 88px);
+  transform: translateX(-50%) rotate(-8deg);
+  filter: drop-shadow(0 7px 0 rgba(170, 111, 29, .18));
+  animation: praise-crown .7s .32s both cubic-bezier(.2, 1.6, .35, 1);
+}
+
+.praise-hands {
+  position: absolute;
+  left: 50%;
+  bottom: -6%;
+  display: flex;
+  width: 116%;
+  justify-content: space-between;
+  transform: translateX(-50%);
+  font-size: min(12vw, 78px);
+}
+
+.praise-hands span:first-child { animation: praise-left-hand .5s .48s 4 alternate ease-in-out; }
+.praise-hands span:last-child { animation: praise-right-hand .5s .48s 4 alternate ease-in-out; }
+
+.praise-stars {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  bottom: max(5vh, 28px);
+  display: flex;
+  gap: clamp(8px, 2vw, 18px);
+  transform: translateX(-50%);
+}
+
+.praise-stars span {
+  display: grid;
+  place-items: center;
+  width: clamp(62px, 11vw, 96px);
+  aspect-ratio: 1;
+  border: 5px solid white;
+  border-radius: 50%;
+  background: #ffdf64;
+  box-shadow: 0 8px 0 rgba(189, 124, 37, .17);
+  font-size: clamp(38px, 7vw, 62px);
+  opacity: 0;
+  animation: praise-star .52s both cubic-bezier(.2, 1.7, .4, 1);
+}
+
+.praise-stars span:nth-child(1) { animation-delay: .28s; }
+.praise-stars span:nth-child(2) { animation-delay: .46s; }
+.praise-stars span:nth-child(3) { animation-delay: .64s; }
+
+.floating-praise {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+}
+
+.floating-praise span {
+  position: absolute;
+  font-size: clamp(36px, 7vw, 76px);
+  opacity: 0;
+  filter: drop-shadow(0 5px 0 rgba(83, 101, 91, .12));
+  animation: floating-praise 2s both ease-out;
+}
+
+.floating-praise span:nth-child(1) { left: 12%; top: 23%; animation-delay: .08s; }
+.floating-praise span:nth-child(2) { right: 12%; top: 18%; animation-delay: .23s; }
+.floating-praise span:nth-child(3) { left: 18%; bottom: 23%; animation-delay: .38s; }
+.floating-praise span:nth-child(4) { right: 17%; bottom: 26%; animation-delay: .53s; }
+.floating-praise span:nth-child(5) { left: 48%; top: 7%; animation-delay: .68s; }
+
+@keyframes celebration-screen {
+  0% { opacity: 0; }
+  12%, 82% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes celebration-rays { to { transform: rotate(360deg); } }
+
+@keyframes praise-mascot {
+  0% { opacity: 0; transform: translateY(45px) scale(.18) rotate(-18deg); }
+  22% { opacity: 1; transform: translateY(-18px) scale(1.12) rotate(6deg); }
+  42% { transform: translateY(0) scale(1) rotate(-2deg); }
+  76% { transform: translateY(-12px) scale(1.03) rotate(2deg); }
+  100% { opacity: 0; transform: translateY(-55px) scale(.86) rotate(-3deg); }
+}
+
+@keyframes praise-face {
+  0%, 100% { transform: scale(1) rotate(-2deg); }
+  50% { transform: scale(1.12) rotate(3deg); }
+}
+
+@keyframes praise-crown {
+  from { opacity: 0; transform: translateX(-50%) translateY(-50px) scale(.25) rotate(-28deg); }
+}
+
+@keyframes praise-left-hand {
+  from { transform: rotate(-24deg) translateY(7px); }
+  to { transform: rotate(18deg) translateY(-8px); }
+}
+
+@keyframes praise-right-hand {
+  from { transform: rotate(24deg) translateY(7px); }
+  to { transform: rotate(-18deg) translateY(-8px); }
+}
+
+@keyframes praise-star {
+  from { opacity: 0; transform: translateY(40px) scale(.1) rotate(-80deg); }
+  to { opacity: 1; transform: translateY(0) scale(1) rotate(0); }
+}
+
+@keyframes floating-praise {
+  0% { opacity: 0; transform: translateY(35px) scale(.25) rotate(-20deg); }
+  20%, 70% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-85px) scale(1.2) rotate(16deg); }
+}
+
+@media (max-width: 760px) {
+  .praise-mascot { width: min(58vw, 270px); border-width: 7px; }
+  .praise-stars { bottom: max(7vh, 36px); }
+  .praise-stars span { border-width: 4px; }
+}
+
+@media (max-height: 580px) and (orientation: landscape) {
+  .praise-mascot { width: min(34vh, 245px); }
+  .praise-face { font-size: min(22vh, 145px); }
+  .praise-crown { font-size: min(12vh, 70px); }
+  .praise-hands { font-size: min(11vh, 65px); }
+  .praise-stars { bottom: 16px; }
+  .praise-stars span { width: min(14vh, 72px); font-size: min(8vh, 44px); }
+}
