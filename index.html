@@ -7,6 +7,7 @@
   <meta name="description" content="为学龄前儿童设计的图形化语言启蒙小游戏">
   <title>小文认知世界</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="positive-feedback.css">
 </head>
 <body>
   <main class="game-shell" id="gameShell">
@@ -62,8 +63,22 @@
       <div class="reward" id="reward" aria-hidden="true"><span>⭐</span></div>
     </section>
 
+    <div class="celebration" id="celebration" aria-hidden="true">
+      <div class="celebration-rays" aria-hidden="true"></div>
+      <div class="floating-praise" aria-hidden="true">
+        <span>🎉</span><span>✨</span><span>🌈</span><span>🎊</span><span>⭐</span>
+      </div>
+      <div class="praise-mascot" aria-hidden="true">
+        <span class="praise-crown">👑</span>
+        <span class="praise-face">🐻</span>
+        <div class="praise-hands"><span>👏</span><span>👏</span></div>
+      </div>
+      <div class="praise-stars" aria-hidden="true"><span>⭐</span><span>⭐</span><span>⭐</span></div>
+    </div>
+
     <div class="audio-hint" id="audioHint" aria-hidden="true">🔊</div>
   </main>
   <script src="game.js"></script>
+  <script src="positive-feedback.js"></script>
 </body>
 </html>
